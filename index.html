@@ -1,12 +1,103 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
-</head>
-<body>
-    <h1>Hello, World!</h1>
-    <p>Welcome to my Chip tracker web page - Suresh.</p>
-</body>
-</html>
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sector Monitor</title>
+        <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #0b0f19; color: #f3f4f6; padding: 15px; margin: 0; }
+            .container { max-width: 100%; margin: auto; }
+            h1 { color: #38bdf8; font-size: 1.5rem; margin-bottom: 2px; font-weight: 700; text-align: center; }
+            .timestamp { color: #6b7280; font-size: 0.8rem; margin-bottom: 20px; text-align: center; font-family: monospace; }
+            .table-container { overflow-x: auto; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); }
+            .styled-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; }
+            .styled-table th { background-color: #1f2937; color: #38bdf8; padding: 12px 10px; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; border-bottom: 2px solid #374151; }
+            .styled-table td { padding: 14px 10px; border-bottom: 1px solid #1f2937; background-color: #111827; white-space: nowrap; font-weight: 500; }
+            .styled-table tbody tr:nth-of-type(even) td { background-color: #0f172a; }
+            .status-pass { color: #4ade80; font-weight: bold; background: rgba(74, 222, 128, 0.15); padding: 4px 6px; border-radius: 6px; font-size: 0.8rem; }
+            .status-fail { color: #f87171; font-weight: bold; background: rgba(248, 113, 113, 0.15); padding: 4px 6px; border-radius: 6px; font-size: 0.8rem; }
+            .change-pos { color: #4ade80; font-family: monospace; }
+            .change-neg { color: #f87171; font-family: monospace; }
+            .ticker-col { font-weight: 700 !important; color: #ffffff; font-size: 1rem; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>📡 Semiconductor Watchlist Matrix</h1>
+            <div class="timestamp">LAST CLOUD SCAN: 2026-06-26 17:31:36 UTC</div>
+            <div class="table-container">
+                <table border="1" class="dataframe styled-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Ticker</th>
+      <th>Price</th>
+      <th>Daily Change</th>
+      <th>Phase 1 (Daily)</th>
+      <th>Phase 2 (Weekly)</th>
+      <th>Phase 4 (Macro)</th>
+      <th>System Bias Verdict</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>SOXX</td>
+      <td>$600.51</td>
+      <td class='change-neg'>-3.95%</td>
+      <td><span class='status-fail'>FAIL</span></td>
+      <td><span class='status-pass'>PASS</span></td>
+      <td><span class='status-pass'>PASS</span></td>
+      <td>🟡 CHOPPY / NEUTRAL</td>
+    </tr>
+    <tr>
+      <td>NVDA</td>
+      <td>$195.10</td>
+      <td class='change-neg'>-0.33%</td>
+      <td><span class='status-fail'>FAIL</span></td>
+      <td><span class='status-fail'>FAIL</span></td>
+      <td><span class='status-fail'>FAIL</span></td>
+      <td>🚨 MACRO BEARISH</td>
+    </tr>
+    <tr>
+      <td>AVGO</td>
+      <td>$372.37</td>
+      <td class='change-neg'>-1.73%</td>
+      <td><span class='status-fail'>FAIL</span></td>
+      <td><span class='status-fail'>FAIL</span></td>
+      <td><span class='status-fail'>FAIL</span></td>
+      <td>🚨 MACRO BEARISH</td>
+    </tr>
+    <tr>
+      <td>AMD</td>
+      <td>$522.72</td>
+      <td class='change-neg'>-1.85%</td>
+      <td><span class='status-fail'>FAIL</span></td>
+      <td><span class='status-pass'>PASS</span></td>
+      <td><span class='status-pass'>PASS</span></td>
+      <td>🟡 CHOPPY / NEUTRAL</td>
+    </tr>
+    <tr>
+      <td>TSM</td>
+      <td>$434.50</td>
+      <td class='change-neg'>-0.11%</td>
+      <td><span class='status-fail'>FAIL</span></td>
+      <td><span class='status-pass'>PASS</span></td>
+      <td><span class='status-pass'>PASS</span></td>
+      <td>🟡 CHOPPY / NEUTRAL</td>
+    </tr>
+    <tr>
+      <td>INTC</td>
+      <td>$129.35</td>
+      <td class='change-neg'>-2.65%</td>
+      <td><span class='status-pass'>PASS</span></td>
+      <td><span class='status-pass'>PASS</span></td>
+      <td><span class='status-pass'>PASS</span></td>
+      <td>🟢 STRONGLY BULLISH</td>
+    </tr>
+  </tbody>
+</table>
+            </div>
+        </div>
+    </body>
+    </html>
+    
