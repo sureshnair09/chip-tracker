@@ -6,7 +6,7 @@ from datetime import datetime
 
 def generate_hardened_valuation_dashboard():
     # Your comprehensive sector watchlist
-    watchlist = ["SOXX", "NVDA", "AVGO", "AMD", "TSM", "INTC"]
+    watchlist = ["SOXX", "NVDA", "AVGO", "AMD", "TSM", "INTC", "WDC", "STX", "SNDK"]
     summary_rows = []
     
     print(f"Beginning master technical & robust fundamental scan for: {watchlist}...")
