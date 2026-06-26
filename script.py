@@ -6,7 +6,7 @@ from datetime import datetime
 
 def generate_perfect_mobile_dashboard():
     # Master tracking array - Feel free to change "SOXX" to "SOXL" to watch the 3X variant directly
-    watchlist = ["SOXX", "NVDA", "AVGO", "AMD", "TSM", "INTC", "WDC", "STX", "SNDK", "MU", "ATML", "BP", "CVX", "PBR"]
+    watchlist = ["SOXX", "AVGO", "NVDA", "AMD", "TSM", "INTC", "WDC", "STX", "SNDK", "MU", "ATML", "BP", "CVX", "PBR"]
     summary_rows = []
     
     print(f"Executing master synchronization for watchlist: {watchlist}...")
