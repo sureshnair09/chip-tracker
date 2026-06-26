@@ -176,20 +176,20 @@ def generate_perfect_mobile_dashboard():
         <body>
         📡 Institutional Macro TrackerLAST CLOUD REFRESH: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} UTC
             {html_table}"""
-
-# Precise regex structural replacements for clean UI mapping
-html_document = html_document.replace("🟢 PASS", "PASS")
-html_document = html_document.replace("🔴 FAIL", "FAIL")
-html_document = html_document.replace("+", "+")
-html_document = html_document.replace("-", "-")
-html_document = html_document.replace("", "")
-html_document = html_document.replace("🔥 OVERVALUED", "🔥 OVERVALUED")
-html_document = html_document.replace("💎 UNDERVALUED", "💎 UNDERVALUED")
-html_document = html_document.replace("🎯 BUY ZONE", "🎯 BUY ZONE")
-html_document = html_document.replace("⏳ WATCHING ZONE", "⏳ WATCHING ZONE")
-with open("index.html", "w", encoding="utf-8") as f:
-    f.write(html_document)
-print("🎉 System tracking alignment complete! Fresh index.html with all 10 columns deployed.")
-if name == "main":
-    generate_perfect_mobile_dashboard()
+    
+    # Precise regex structural replacements for clean UI mapping
+    html_document = html_document.replace("🟢 PASS", "PASS")
+    html_document = html_document.replace("🔴 FAIL", "FAIL")
+    html_document = html_document.replace("+", "+")
+    html_document = html_document.replace("-", "-")
+    html_document = html_document.replace("", "")
+    html_document = html_document.replace("🔥 OVERVALUED", "🔥 OVERVALUED")
+    html_document = html_document.replace("💎 UNDERVALUED", "💎 UNDERVALUED")
+    html_document = html_document.replace("🎯 BUY ZONE", "🎯 BUY ZONE")
+    html_document = html_document.replace("⏳ WATCHING ZONE", "⏳ WATCHING ZONE")
+    with open("index.html", "w", encoding="utf-8") as f:
+        f.write(html_document)
+    print("🎉 System tracking alignment complete! Fresh index.html with all 10 columns deployed.")
+    if name == "main":
+        generate_perfect_mobile_dashboard()
     
