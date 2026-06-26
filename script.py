@@ -6,7 +6,7 @@ from datetime import datetime
 
 def generate_complete_system_dashboard():
     # Complete high-priority semiconductor watchlist
-    watchlist = ["SOXX", "NVDA", "AVGO", "AMD", "TSM", "INTC"]
+    watchlist = ["SOXX", "NVDA", "AVGO", "AMD", "TSM", "INTC", "WDC", "STX", "SNDK", "MU", "ATML"]
     summary_rows = []
     
     print(f"Beginning ultimate master technical, fundamental & entry scan for: {watchlist}...")
