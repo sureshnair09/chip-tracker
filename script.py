@@ -4,17 +4,22 @@ import numpy as np
 import ta
 from datetime import datetime
 
-def generate_ultimate_valuation_dashboard():
+def generate_hardened_valuation_dashboard():
+    # Your comprehensive sector watchlist
     watchlist = ["SOXX", "NVDA", "AVGO", "AMD", "TSM", "INTC"]
     summary_rows = []
     
-    print(f"Beginning master fundamental/technical scan for: {watchlist}...")
+    print(f"Beginning master technical & robust fundamental scan for: {watchlist}...")
     
     for ticker in watchlist:
+        print(f"Processing target: {ticker}...")
         try:
             ticker_obj = yf.Ticker(ticker)
-            df_daily = ticker_obj.history(period="2y", interval="1d")
+            
+            # 1. Download Core Prices (Highly reliable endpoint, rarely rate-limited)
+            df_daily = yf.download(ticker, period="2y", interval="1d", progress=False)
             if df_daily.empty:
+                print(f"⚠️ Warning: No price data returned for {ticker}. Skipping.")
                 continue
                 
             if isinstance(df_daily.columns, pd.MultiIndex):
@@ -24,7 +29,7 @@ def generate_ultimate_valuation_dashboard():
             prev_price = float(df_daily['Close'].iloc[-2])
             daily_change = ((current_price - prev_price) / prev_price) * 100
             
-            # --- Technical Indicator Matrix ---
+            # --- Technical Indicator Calculations ---
             df_daily['ema9'] = ta.trend.ema_indicator(df_daily['Close'], window=9)
             df_daily['ema21'] = ta.trend.ema_indicator(df_daily['Close'], window=21)
             df_daily['sma50'] = ta.trend.sma_indicator(df_daily['Close'], window=50)
@@ -40,6 +45,7 @@ def generate_ultimate_valuation_dashboard():
             m3_last = df_3d.iloc[-1]
             m5_last = df_5d.iloc[-1]
             
+            # --- Technical System Scoring Rules ---
             p1_pass = (current_price > d_last['ema9']) and (d_last['ema9'] > d_last['ema21']) and (d_last['macd_hist'] > 0)
             p2_pass = (current_price > m3_last['ema9']) and (current_price > m5_last['ema9'])
             p4_pass = (current_price > d_last['sma50']) and (d_last['sma50'] > d_last['sma200'])
@@ -53,42 +59,50 @@ def generate_ultimate_valuation_dashboard():
             else:
                 bias = "🟡 CHOPPY / NEUTRAL"
                 
-            # --- Earnings Countdown Extraction ---
-            countdown_str = "N/A"
-            if ticker != "SOXX":
-                calendar = ticker_obj.calendar
-                if calendar is not None and 'Earnings Date' in calendar and len(calendar['Earnings Date']) > 0:
-                    earnings_date = calendar['Earnings Date'].date() if hasattr(calendar['Earnings Date'], 'date') else calendar['Earnings Date']
-                    days_remaining = (earnings_date - datetime.now().date()).days
-                    if days_remaining < 0: countdown_str = "Completed"
-                    elif days_remaining == 0: countdown_str = "🚨 TODAY"
-                    elif days_remaining <= 7: countdown_str = f"⚠️ {days_remaining} Days"
-                    else: countdown_str = f"{days_remaining} Days"
+            # --- Hardened Metadata Extraction (Protected against Cloud Rate Limits) ---
+            countdown_str = "Fetch Timeout"
+            pe_str = "Fetch Timeout"
+            val_verdict = "Fetch Timeout"
             
-            # --- Dynamic Valuation Calculations ---
-            pe_str = "N/A"
-            val_verdict = "Fair Value"
-            
-            if ticker != "SOXX":
-                info = ticker_obj.info
-                current_pe = info.get('trailingPE', None)
-                
-                # Fetching 5-Year Historical Medians (Approximated from trailing metrics)
-                historical_medians = {"NVDA": 45.0, "AVGO": 32.0, "AMD": 40.0, "TSM": 22.0, "INTC": 18.0}
-                five_year_median = historical_medians.get(ticker, 25.0)
-                
-                if current_pe and current_pe != "N/A":
-                    pe_str = f"{current_pe:.1f}"
-                    deviation = ((current_pe - five_year_median) / five_year_median) * 100
-                    
-                    if deviation > 25.0:
-                        val_verdict = f"🔥 OVERVALUED (+{deviation:.0f}%)"
-                    elif deviation < -15.0:
-                        val_verdict = f"💎 UNDERVALUED ({deviation:.0f}%)"
-                    else:
-                        val_verdict = "⚖️ FAIR VALUE"
-            else:
+            if ticker == "SOXX" or ticker == "SOXL":
+                countdown_str = "N/A"
+                pe_str = "N/A"
                 val_verdict = "ETF Sleeve"
+            else:
+                # Wrap corporate calendar in an isolated safety bubble
+                try:
+                    calendar = ticker_obj.calendar
+                    if calendar is not None and 'Earnings Date' in calendar and len(calendar['Earnings Date']) > 0:
+                        earnings_date = calendar['Earnings Date'].date() if hasattr(calendar['Earnings Date'], 'date') else calendar['Earnings Date']
+                        days_remaining = (earnings_date - datetime.now().date()).days
+                        if days_remaining < 0: countdown_str = "Completed"
+                        elif days_remaining == 0: countdown_str = "🚨 TODAY"
+                        elif days_remaining <= 7: countdown_str = f"⚠️ {days_remaining} Days"
+                        else: countdown_str = f"{days_remaining} Days"
+                    else:
+                        countdown_str = "No Date Found"
+                except Exception:
+                    countdown_str = "Rate Limited" # Prevents loop failure if endpoint is blocked
+
+                # Wrap fundamental valuation metrics in an isolated safety bubble
+                try:
+                    info = ticker_obj.info
+                    current_pe = info.get('trailingPE', None)
+                    historical_medians = {"NVDA": 45.0, "AVGO": 32.0, "AMD": 40.0, "TSM": 22.0, "INTC": 18.0}
+                    five_year_median = historical_medians.get(ticker, 25.0)
+                    
+                    if current_pe and current_pe != "N/A":
+                        pe_str = f"{current_pe:.1f}"
+                        deviation = ((current_pe - five_year_median) / five_year_median) * 100
+                        if deviation > 25.0: val_verdict = f"🔥 OVERVALUED (+{deviation:.0f}%)"
+                        elif deviation < -15.0: val_verdict = f"💎 UNDERVALUED ({deviation:.0f}%)"
+                        else: val_verdict = "⚖️ FAIR VALUE"
+                    else:
+                        pe_str = "N/A"
+                        val_verdict = "No PE Data"
+                except Exception:
+                    pe_str = "Proxy Denied"
+                    val_verdict = "Rate Limited" # Safely populates cell text without destroying the table row
 
             summary_rows.append([
                 ticker, f"${current_price:.2f}", f"{daily_change:+.2f}%",
@@ -97,16 +111,18 @@ def generate_ultimate_valuation_dashboard():
                 "🟢 PASS" if p4_pass else "🔴 FAIL",
                 bias, countdown_str, pe_str, val_verdict
             ])
-        except Exception as e:
-            print(f"Error skipping step for {ticker}: {e}")
+            print(f"Successfully mounted data row for {ticker}")
             
+        except Exception as global_ticker_error:
+            print(f"❌ Critical unhandled error on ticker loop layer {ticker}: {global_ticker_error}")
+
+    # --- Build and Style HTML Output ---
     report_df = pd.DataFrame(summary_rows, columns=[
         "Ticker", "Price", "Daily Change", "Phase 1", "Phase 2", "Phase 4", "System Bias", "Earnings", "Current P/E", "Valuation Status"
     ])
     
     html_table = report_df.to_html(index=False, classes='styled-table')
     
-    # --- HTML Shell ---
     html_document = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -136,7 +152,7 @@ def generate_ultimate_valuation_dashboard():
     <body>
         <div class="container">
             <h1>📡 Institutional Macro Tracker</h1>
-            <div class="timestamp">SCAN: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} UTC</div>
+            <div class="timestamp">UPDATED: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} UTC</div>
             <div class="table-container">{html_table}</div>
         </div>
     </body>
@@ -153,7 +169,7 @@ def generate_ultimate_valuation_dashboard():
     
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html_document)
-    print("🎉 Master system synchronized successfully.")
+    print("🎉 Complete! Robust dashboard written with data fallback protections.")
 
 if __name__ == "__main__":
-    generate_ultimate_valuation_dashboard()
+    generate_hardened_valuation_dashboard()
