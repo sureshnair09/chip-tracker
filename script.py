@@ -170,3 +170,7 @@ def generate_complete_system_dashboard():
             .ticker-col {{ font-weight: 700 !important; color: #ffffff; }}
             .val-over {{ color: #f87171; font-weight: bold; background: rgba(248, 113, 113, 0.12); padding: 3px 5px; border-radius: 4px; }}
             .val-under {{ color: #38bdf8; font-weight: bold; background: rgba(56, 189, 248, 0.12); padding: 3px 5px; border-radius: 4px; }}
+            .signal-watch {{ color: #fbbf24; font-weight: 700; background: rgba(251, 191, 36, 0.12); padding: 3px 5px; border-radius: 4px; }}@keyframes pulse {{ 0% {{ opacity: 0.6; }} 50% {{ opacity: 1; }} 100% {{ opacity: 0.6; }} }}
+            📡 Institutional Macro TrackerLAST CLOUD SCAN: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} UTC{html_table}"""# Text replacement tags for final browser HTML rendering layouthtml_document = html_document.replace("🟢 PASS", "PASS")html_document = html_document.replace("🔴 FAIL", "FAIL")html_document = html_document.replace("+", "+")html_document = html_document.replace("-", "-")html_document = html_document.replace("", "")html_document = html_document.replace("🔥 OVERVALUED", "🔥 OVERVALUED")html_document = html_document.replace("💎 UNDERVALUED", "💎 UNDERVALUED")html_document = html_document.replace("🎯 BUY ZONE", "🎯 BUY ZONE")html_document = html_document.replace("⏳ WATCHING ZONE", "⏳ WATCHING ZONE")with open("index.html", "w", encoding="utf-8") as f:f.write(html_document)print("🎉 System refresh complete. All data matrices rendered successfully.")if name == "main":generate_complete_system_dashboard()
+    
+    
