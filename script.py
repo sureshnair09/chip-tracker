@@ -191,5 +191,5 @@ with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_document)
 print("🎉 System tracking alignment complete! Fresh index.html with all 10 columns deployed.")
 if name == "main":
-generate_perfect_mobile_dashboard()
+    generate_perfect_mobile_dashboard()
     
