@@ -172,25 +172,22 @@ def generate_perfect_mobile_dashboard():
             .signal-watch {{ color: #fbbf24; font-weight: 700; background: rgba(251, 191, 36, 0.12); padding: 3px 5px; border-radius: 4px; }}
         </style>
 
-📡 Institutional Macro Tracker
-LAST CLOUD REFRESH: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} UTC
-{html_table}
-
-
-
-"""
-html_document = html_document.replace("🟢 PASS", "PASS")
-html_document = html_document.replace("🔴 FAIL", "FAIL")
-html_document = html_document.replace("+", "+")
-html_document = html_document.replace("-", "-")
-html_document = html_document.replace("", "")
-html_document = html_document.replace("🔥 OVERVALUED", "🔥 OVERVALUED")
-html_document = html_document.replace("💎 UNDERVALUED", "💎 UNDERVALUED")
-html_document = html_document.replace("🎯 BUY ZONE", "🎯 BUY ZONE")
-html_document = html_document.replace("⏳ WATCHING ZONE", "⏳ WATCHING ZONE")
-
-with open("index.html", "w", encoding="utf-8") as f:
-    f.write(html_document)
-print("🎉 System tracking alignment complete! Fresh index.html with all 10 columns deployed.")
+    📡 Institutional Macro Tracker
+    LAST CLOUD REFRESH: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} UTC
+    {html_table}
+    """
+    html_document = html_document.replace("🟢 PASS", "PASS")
+    html_document = html_document.replace("🔴 FAIL", "FAIL")
+    html_document = html_document.replace("+", "+")
+    html_document = html_document.replace("-", "-")
+    html_document = html_document.replace("", "")
+    html_document = html_document.replace("🔥 OVERVALUED", "🔥 OVERVALUED")
+    html_document = html_document.replace("💎 UNDERVALUED", "💎 UNDERVALUED")
+    html_document = html_document.replace("🎯 BUY ZONE", "🎯 BUY ZONE")
+    html_document = html_document.replace("⏳ WATCHING ZONE", "⏳ WATCHING ZONE")
+    
+    with open("index.html", "w", encoding="utf-8") as f:
+        f.write(html_document)
+    print("🎉 System tracking alignment complete! Fresh index.html with all 10 columns deployed.")
 if name == "main":
     generate_perfect_mobile_dashboard()
