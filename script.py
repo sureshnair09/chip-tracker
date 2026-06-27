@@ -5,25 +5,26 @@ import ta
 from datetime import datetime
 
 def generate_perfect_mobile_dashboard():
-    # Master tracking array - Feel free to change "SOXX" to "SOXL" to watch the 3X variant directly
-    watchlist = ["SOXX", "AVGO", "NVDA", "AMD", "TSM", "INTC", "WDC", "STX", "SNDK", "MU", "ATML", "BP", "CVX", "PBR" ]
+    watchlist = ["SOXX", "NVDA", "AVGO", "AMD", "TSM", "INTC"]
     summary_rows = []
     
-    print(f"Executing master synchronization for watchlist: {watchlist}...")
+    print(f"Executing fixed synchronization for watchlist: {watchlist}...")
     
     for ticker in watchlist:
         print(f"Scanning technical & fundamental attributes for: {ticker}...")
         try:
-            ticker_obj = yf.Ticker(ticker)
-            
-            # 1. High-reliability endpoint download (Prevents loop crashing)
+            # 1. Download Core Prices safely
             df_daily = yf.download(ticker, period="2y", interval="1d", progress=False)
             if df_daily.empty:
                 print(f"⚠️ Warning: Missing price arrays for {ticker}. Skipping.")
                 continue
                 
+            # FIXED: Only clean the index columns if yfinance returns a MultiIndex format
             if isinstance(df_daily.columns, pd.MultiIndex):
                 df_daily.columns = df_daily.columns.get_level_values(0)
+            
+            # Double check column names are clean lowercase/capital standard
+            df_daily.columns = [str(col).strip() for col in df_daily.columns]
                 
             current_price = float(df_daily['Close'].iloc[-1])
             prev_price = float(df_daily['Close'].iloc[-2])
@@ -80,21 +81,20 @@ def generate_perfect_mobile_dashboard():
             if is_in_fib_zone and is_adx_exhausted and is_dmi_bullish:
                 entry_signal = "🎯 BUY ZONE"
             elif is_in_fib_zone and not is_dmi_bullish:
-                entry_signal = "⏳ WATCHING ZONE (Waiting DMI Cross)"
+                entry_signal = "⏳ WATCHING ZONE"
             elif current_price > fib_50:
-                entry_signal = "📈 EXTENDED (Wait for Dip)"
+                entry_signal = "📈 EXTENDED"
             else:
                 entry_signal = "💤 NO SIGNAL"
 
-            # --- Cloud-Protected Metadata Layers ---
+            # --- Protected Metadata Fields ---
             countdown_str = "N/A"
-            pe_str = "N/A"
             val_verdict = "Fair Value"
             
             if ticker in ["SOXX", "SOXL"]:
                 val_verdict = "ETF Sleeve"
             else:
-                # Isolated Protected Calendar Processing
+                ticker_obj = yf.Ticker(ticker)
                 try:
                     calendar = ticker_obj.calendar
                     if calendar is not None and 'Earnings Date' in calendar and len(calendar['Earnings Date']) > 0:
@@ -105,9 +105,8 @@ def generate_perfect_mobile_dashboard():
                         elif days_remaining <= 7: countdown_str = f"⚠️ {days_remaining} Days"
                         else: countdown_str = f"{days_remaining} Days"
                     else: countdown_str = "No Date"
-                except Exception: countdown_str = "Rate Blocked"
+                except Exception: countdown_str = "Unavailable"
 
-                # Isolated Protected Valuation Processing
                 try:
                     info = ticker_obj.info
                     current_pe = info.get('trailingPE', None)
@@ -115,13 +114,12 @@ def generate_perfect_mobile_dashboard():
                     five_year_median = historical_medians.get(ticker, 25.0)
                     
                     if current_pe and current_pe != "N/A":
-                        pe_str = f"{current_pe:.1f}"
                         deviation = ((current_pe - five_year_median) / five_year_median) * 100
                         if deviation > 25.0: val_verdict = f"🔥 OVERVALUED (+{deviation:.0f}%)"
                         elif deviation < -15.0: val_verdict = f"💎 UNDERVALUED ({deviation:.0f}%)"
                         else: val_verdict = "⚖️ FAIR VALUE"
                     else: val_verdict = "No PE Data"
-                except Exception: val_verdict = "Rate Blocked"
+                except Exception: val_verdict = "Unavailable"
 
             summary_rows.append([
                 ticker, f"${current_price:.2f}", f"{daily_change:+.2f}%",
@@ -130,20 +128,22 @@ def generate_perfect_mobile_dashboard():
                 "🟢 PASS" if p4_pass else "🔴 FAIL",
                 bias, countdown_str, val_verdict, entry_signal
             ])
-            print(f"Data mapping array row appended for {ticker}")
+            print(f"Successfully tracked data row for {ticker}")
             
         except Exception as e:
             print(f"❌ Error skipping compilation loop for {ticker}: {e}")
 
-    # --- Build Master Dataframe Mapping Architecture ---
+    # --- Build HTML Structural Matrix ---
+    if not summary_rows:
+        print("❌ Critical Error: No ticker rows were built. HTML export canceled.")
+        return
+
     report_df = pd.DataFrame(summary_rows, columns=[
         "Ticker", "Price", "Daily Change", "Phase 1", "Phase 2", "Phase 4", "System Bias", "Earnings", "Valuation", "Advanced Entry Signal"
     ])
     
-    # Export pandas matrix cleanly into raw standard HTML
     html_table = report_df.to_html(index=False, classes='styled-table')
     
-    # --- Mobile-Responsive Touch UI Viewport ---
     html_document = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -170,26 +170,26 @@ def generate_perfect_mobile_dashboard():
             .val-under {{ color: #38bdf8; font-weight: bold; background: rgba(56, 189, 248, 0.12); padding: 3px 5px; border-radius: 4px; }}
             .signal-buy {{ color: #4ade80; font-weight: 800; background: rgba(74, 222, 128, 0.25); padding: 4px 6px; border-radius: 6px; }}
             .signal-watch {{ color: #fbbf24; font-weight: 700; background: rgba(251, 191, 36, 0.12); padding: 3px 5px; border-radius: 4px; }}
-            @keyframes pulse {{ 0% {{ opacity: 0.6; }} 50% {{ opacity: 1; }} 100% {{ opacity: 0.6; }} }}
-            </style>
-        </head>
-        <body>
-        📡 Institutional Macro TrackerLAST CLOUD REFRESH: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} UTC
-            {html_table}"""
-    
-    # Precise regex structural replacements for clean UI mapping
-    html_document = html_document.replace("🟢 PASS", "PASS")
-    html_document = html_document.replace("🔴 FAIL", "FAIL")
-    html_document = html_document.replace("+", "+")
-    html_document = html_document.replace("-", "-")
-    html_document = html_document.replace("", "")
-    html_document = html_document.replace("🔥 OVERVALUED", "🔥 OVERVALUED")
-    html_document = html_document.replace("💎 UNDERVALUED", "💎 UNDERVALUED")
-    html_document = html_document.replace("🎯 BUY ZONE", "🎯 BUY ZONE")
-    html_document = html_document.replace("⏳ WATCHING ZONE", "⏳ WATCHING ZONE")
-    with open("index.html", "w", encoding="utf-8") as f:
-        f.write(html_document)
-    print("🎉 System tracking alignment complete! Fresh index.html with all 10 columns deployed.")
-    if name == "main":
-        generate_perfect_mobile_dashboard()
-    
+        </style>
+
+📡 Institutional Macro Tracker
+LAST CLOUD REFRESH: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} UTC
+{html_table}
+
+
+
+"""
+html_document = html_document.replace("🟢 PASS", "PASS")
+html_document = html_document.replace("🔴 FAIL", "FAIL")
+html_document = html_document.replace("+", "+")
+html_document = html_document.replace("-", "-")
+html_document = html_document.replace("", "")
+html_document = html_document.replace("🔥 OVERVALUED", "🔥 OVERVALUED")
+html_document = html_document.replace("💎 UNDERVALUED", "💎 UNDERVALUED")
+html_document = html_document.replace("🎯 BUY ZONE", "🎯 BUY ZONE")
+html_document = html_document.replace("⏳ WATCHING ZONE", "⏳ WATCHING ZONE")
+with open("index.html", "w", encoding="utf-8") as f:
+f.write(html_document)
+print("🎉 System tracking alignment complete! Fresh index.html with all 10 columns deployed.")
+if name == "main":
+generate_perfect_mobile_dashboard()
