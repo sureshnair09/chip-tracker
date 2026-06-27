@@ -192,4 +192,4 @@ def generate_perfect_mobile_dashboard():
 
 if __name__ == "__main__":
     # FIXED: The called name now perfectly matches the function declaration at the top
-    generate_perfect_mobile_dashboard()
+    generate_perfect_mobile_dashboard() 
