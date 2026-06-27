@@ -188,7 +188,7 @@ def generate_perfect_mobile_dashboard():
     
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html_document)
-    print("🎉 Complete! Robust dashboard written with data fallback protections.")
+print("🎉 Complete! Robust dashboard written with data fallback protections.")
 
 if __name__ == "__main__":
     generate_hardened_valuation_dashboard()
