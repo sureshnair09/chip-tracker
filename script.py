@@ -5,7 +5,7 @@ import ta
 from datetime import datetime
 
 def generate_perfect_mobile_dashboard():
-    watchlist = ["SOXX", "NVDA", "AVGO", "AMD", "TSM", "INTC", "WDC", "STX", "SNDK", "IBM", "IONQ"] 
+    watchlist = ["SOXX", "NVDA", "MU", "AVGO", "AMD", "TSM", "INTC", "WDC", "STX", "SNDK", "IBM", "IONQ", "RGTI", "GOOG", "GOOGL", "AMZN", "TSLA", "META", "MSFT", "AAPL", "SPY", "QQQ", "DIA"] 
     summary_rows = []
     
     print(f"Executing fixed synchronization for watchlist: {watchlist}...")
